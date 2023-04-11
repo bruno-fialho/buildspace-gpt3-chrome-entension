@@ -29,7 +29,6 @@ const insert = (content) => {
 }
 
 chrome.runtime.onMessage.addListener(
-  // This is the message listener
   (request, sender, sendResponse) => {
     console.log(sender.tab ?
       "from a content script:" + sender.tab.url :
@@ -37,10 +36,8 @@ chrome.runtime.onMessage.addListener(
     if (request?.message === 'inject') {
       const { content } = request;
 			
-      // Call this insert function
       const result = insert(content);
 			
-      // If something went wrong, send a failed status
       if (!result) {
         sendResponse({ status: 'failed' });
       }

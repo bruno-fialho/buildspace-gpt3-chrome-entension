@@ -11,19 +11,15 @@ const getKey = () => {
 
 const sendMessage =(content) => {
   chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    console.log('tabs', tabs);
     const tab = tabs.find(tab => tab.active);
-    console.log('tab', tab);
 
     if (tab) {
       const activeTab = tab.id; 
-      console.log('activeTab', activeTab);
 
       chrome.tabs.sendMessage(
         activeTab,
         { message: 'inject', content },
         (response) => {
-          console.log('response', response);
           if (response?.status === 'failed') {
             console.log('injection failed.');
           }
@@ -37,7 +33,6 @@ const generate = async (prompt) => {
   const key = await getKey();
   const url = 'https://api.openai.com/v1/completions';
 	
-  // Call completions endpoint
   const completionResponse = await fetch(url, {
     method: 'POST',
     headers: {
@@ -83,7 +78,6 @@ const generateCompletionAction = async (info) => {
 
     const secondPromptCompletion = await generate(secondPrompt);
 
-    console.log(secondPromptCompletion.text);
     sendMessage(secondPromptCompletion.text);
   } catch (error) {
     console.log(error);
